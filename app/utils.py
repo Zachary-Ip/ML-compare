@@ -1,17 +1,18 @@
 from sklearn import datasets
 
-# --- Load Dataset ---
+
 def load_dataset(name):
-    if name == "Iris":
+    '''
+    Load Data, Targets, and features from sklearn datasets
+    '''
+    if name == "Iris": # classification
         dataset = datasets.load_iris()
-    elif name == "Wine":
+    elif name == "Wine": # Classification
         dataset = datasets.load_wine()
-    elif name == "Digits":
-        dataset = datasets.load_digits()
-    elif name == "Diabetes":
+    elif name == "Diabetes": # regression
         dataset = datasets.load_diabetes()
-    elif name == "Boston Housing":
-        dataset = datasets.load_boston()
+    elif name == "California Housing": #regression 
+        dataset = datasets.fetch_california_housing()
     else:
         return None
     return dataset.data, dataset.target, dataset.feature_names

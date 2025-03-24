@@ -17,8 +17,17 @@ with st.sidebar:
     m1 = components.model_selector(task, "method_1")
     m2 = components.model_selector(task, "method_2")
 
-if m2 != "None":
+if m2 == "None":
+    st.subheader("Choose Model 1's hyperparameters")
+    components.train_model(m1)
+else:
     col1, col2 = st.columns(2)
+    with col1:
+        pass
+
+    with col2:
+        pass
+
         
 
      

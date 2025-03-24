@@ -42,7 +42,7 @@ def plot_features(feats, data, f1, f2):
 
 def model_selector(task, key):
     model_options = {
-        "Regression": ["None", "Linear", "Ridge", "Lasso", "Elastic Net", "Polynomial", "Naive Bayes", "AdaBoostRegressor", "Extr"],
+        "Regression": ["None", "Linear", "Ridge", "Lasso", "Elastic Net", "AdaBoostRegressor", "Extr"],
         "Classification": ["None", "Logistic", "Naive Bayes", "Random Forest", "AdaBoost", "Gradient Boost", "XGBoost"],
         "Clustering": ["None", "K-Means", "Hierarchical", "DBScan"]
     }
@@ -52,67 +52,121 @@ def model_selector(task, key):
 
 def train_model(method):
     name2function = {
+        "None":{
+            "fn": None,
+            "params": None,
+        },
         "Linear":{
             "fn": sklearn.linear_model.LinearRegression,
-            "params": []
+            "params": None
         }, 
         "Ridge":{
             "fn": sklearn.linear_model.Ridge,
-            "params": []
+            "params": {
+                "alpha": {
+                    "type":"float",
+                    "min": 0,
+                    "value": 1
+                }
+            }
         },
         "Lasso":{
             "fn": sklearn.linear_model.Lasso,
-            "params": []
+            "params": {
+                "alpha": {
+                    "type":"float",
+                    "min": 0,
+                    "value": 1
+                }
+            }
         },
         "Elastic Net":{
             "fn": sklearn.linear_model.ElasticNet,
-            "params": []
+            "params": {
+                "alpha": {
+                    "type":"float",
+                    "min": 0,
+                    "value": 1
+                },
+                "l1_ratio": {
+                    "type":"float",
+                    "min":0,
+                    "max":1,
+                    "value": 0.5
+                }
+            }
         },
-        "Polynomial":{
-            "fn": sklearn.linear_model.LinearRegression,
-            "params": []
+        "AdaBoostRegressor": {
+            "fn": sklearn.ensemble.AdaBoostRegressor,
+            "params": {
+                "n_estimators": {
+                    "type":"int",
+                    "min": 1,
+                    "value": 50
+                },
+                "learning_rate": {
+                    "type":"float",
+                    "min": 0,
+                    "value": 1
+                },
+                "loss":{
+                    "type":"select",
+                    "options": ["linear", "square", "exponential"],
+                    "value": "linear"
+                }
+            }
         },
-        "Naive Bayes":{
-            "fn": sklearn.linear_model.LinearRegression,
-            "params": []
-        },
-        "Logistic": {
-            "fn": sklearn.linear_model.LinearRegression,
-            "params": []
-        },
-        "Naive Bayes":{
-            "fn": sklearn.linear_model.LinearRegression,
-            "params": []
-        },
-        "Random Forest":{
-            "fn": sklearn.linear_model.LinearRegression,
-            "params": []
-        },
-        "AdaBoost":{
-            "fn": sklearn.linear_model.LinearRegression,
-            "params": []
-        },
-        "Gradient Boost":{
-            "fn": sklearn.linear_model.LinearRegression,
-            "params": []
-        },
-        "XGBoost":{
-            "fn": sklearn.linear_model.LinearRegression,
-            "params": []
-        },
-        "K-Means":{
-            "fn": sklearn.linear_model.LinearRegression,
-            "params": []
-        },
-        "Hierarchical":{
-            "fn": sklearn.linear_model.LinearRegression,
-            "params": []
-        },
-        "DBScan":{
-            "fn": sklearn.linear_model.LinearRegression,
-            "params": []
-        },
+        # "Naive Bayes":{
+        #     "fn": sklearn.linear_model.LinearRegression,
+        #     "params": []
+        # },
+        # "Random Forest":{
+        #     "fn": sklearn.linear_model.LinearRegression,
+        #     "params": []
+        # },
+        # "AdaBoost":{
+        #     "fn": sklearn.linear_model.LinearRegression,
+        #     "params": []
+        # },
+        # "Gradient Boost":{
+        #     "fn": sklearn.linear_model.LinearRegression,
+        #     "params": []
+        # },
+        # "XGBoost":{
+        #     "fn": sklearn.linear_model.LinearRegression,
+        #     "params": []
+        # },
+        # "K-Means":{
+        #     "fn": sklearn.linear_model.LinearRegression,
+        #     "params": []
+        # },
+        # "Hierarchical":{
+        #     "fn": sklearn.linear_model.LinearRegression,
+        #     "params": []
+        # },
+        # "DBScan":{
+        #     "fn": sklearn.linear_model.LinearRegression,
+        #     "params": []
+        # },
     }
+    method_info = name2function[method]
+    st.write(method_info)
+    # Choose hyperparameters
+    if method_info["params"]:
+        with st.sidebar:
+            for key, value in method_info["params"].items():
+                if value["type"] == "int":
+                    val = st.number_input(key, step=1)
+                elif value == "float":
+                    val = st.number_input(key)
+                elif isinstance(value, list):
+                    val = st.selectbox(key,value)
+                    val = st.number_input(key, step=1)
+                method_info["params"][key]["value"] = val
+    
+
+
+
 
     
 
