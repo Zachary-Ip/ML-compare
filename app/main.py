@@ -10,20 +10,26 @@ with st.sidebar:
     task, data, target, feats = components.dataset_selector()
     f1, f2 = components.choose_features(feats)
 
+
 st.write("Plotting features")
-components.plot_features(feats, data, f1, f2)
+f_data = components.plot_features(feats, data, f1, f2)
 
 with st.sidebar:
     m1 = components.model_selector(task, "method_1")
     m2 = components.model_selector(task, "method_2")
 
 if m2 == "None":
-    st.subheader("Choose Model 1's hyperparameters")
-    components.train_model(m1)
+    with st.sidebar:
+        st.subheader("Choose Model 1's hyperparameters")
+    components.train_model(task, m1, f_data, target)
 else:
     col1, col2 = st.columns(2)
     with col1:
-        pass
+        with st.sidebar:
+            st.subheader("Choose Model 1's hyperparameters")
+        components.train_model(task, m1, f_data, target)
 
     with col2:
-        pass
+        with st.sidebar:
+            st.subheader("Choose Model 2's hyperparameters")
+        components.train_model(task, m2, f_data, target)
