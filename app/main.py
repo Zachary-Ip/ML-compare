@@ -27,7 +27,3 @@ else:
 
     with col2:
         pass
-
-        
-
-     
